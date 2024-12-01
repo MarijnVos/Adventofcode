@@ -22,8 +22,10 @@ function processData(strData){
 }
 
 function getDistance(list1, list2){
-    list1 = list1.toSorted();
-    list2 = list2.toSorted();
+    //list1 = list1.toSorted();
+    list1.sort((a,b)=> a-b )
+    list2.sort((a,b)=> a-b )
+
 
     totalDistance = 0
     for (let i = 0; i < list1.length; i++) {
