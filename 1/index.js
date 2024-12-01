@@ -2,14 +2,7 @@ fetch("data.txt")
     .then(response => {return response.text()})
     .then(processData)
     .catch(error =>console.error(error));
-
-function splitToList(strSplit, i){
-    copylist = strSplit.slice()
-    list = copylist.map((element, index, array)=>{array[index] = element[i]});
-    list = copylist.map((element, index, array)=>array[index] = Number(element)); 
-    return list
-}
-
+    
 function processData(strData){
     strSplit = strData.split("\r\n")
     strSplit = strSplit.map((element, index, array)=>array[index] = element.split("   " ));
@@ -21,11 +14,17 @@ function processData(strData){
 
 }
 
+function splitToList(strSplit, i){
+    copylist = strSplit.slice()
+    list = copylist.map((element, index, array)=>{array[index] = element[i]});
+    list = copylist.map((element, index, array)=>array[index] = Number(element)); 
+    return list
+}
+
 function getDistance(list1, list2){
     //list1 = list1.toSorted();
     list1.sort((a,b)=> a-b )
     list2.sort((a,b)=> a-b )
-
 
     totalDistance = 0
     for (let i = 0; i < list1.length; i++) {
@@ -36,7 +35,7 @@ function getDistance(list1, list2){
     console.log("total distance: " + totalDistance)
 }
 
-function getSimScore(List1, list2){
+function getSimScore(list1, list2){
     simScore = 0;
     for (let i = 0; i < list1.length; i++) {
         amount=0;
