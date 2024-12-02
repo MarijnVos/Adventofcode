@@ -2,7 +2,7 @@ fetch("data.txt")
     .then(response => {return response.text()})
     .then(processData)
     .catch(error =>console.error(error));
-    
+
 function processData(strData){
     strSplit = strData.split("\r\n")
     strSplit = strSplit.map((element, index, array)=>array[index] = element.split("   " ));
