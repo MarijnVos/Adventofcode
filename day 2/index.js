@@ -12,13 +12,13 @@ function processData(strData){
 
     let safe = 0
     data.forEach((d)=>{
-        DampererFirstValue = true;
         Dampener = true;
-        dCopy = d.slice();
-        //set increase to -1 or +1
-        let increase = setIncrease(d[0],d[1]);
-        
         console.log(d);
+
+        //set increase to -1 or +1
+        increase = setIncrease(d);
+        
+        
         for (let i = 0; i < (d.length); i++) {
             //get to the last level without problem it's safe
             if(i == d.length-1){
@@ -26,39 +26,65 @@ function processData(strData){
                 safe ++
                 break;
             }
-            difference = (d[i+1]-d[i])*increase;
-            if(difference<1 || difference>3){
+            if(checkDifference(d[i],d[i+1], increase)){
+                console.log("wrong")
                 if(Dampener){
                     Dampener =false;
-                    console.log("level: "+ (i+2) + " difference: " + difference);
-                    d.splice(i+1,1);
-                    i=-1;
+                    if(i == d.length-2){
+                        console.log(`skip last value`)
+                    }
+                    else if(!checkDifference(d[i],d[i+2], increase)){
+                        i++
+                        console.log(`skip : ${i+2} next value ok`)
+                    }
+                    else if(i==0 && !checkDifference(d[1],d[2], increase)){
+                        console.log(`skip : 1 next value ok`)
+                    }
+                    else{
+                        console.log("not safe")
+                        break;
+                    }
                 }
-                else if(DampererFirstValue){
-                    console.log("level: "+ (i+3) + " difference: " + difference);
-                    d = dCopy
-                    DampererFirstValue =false;
-                    increase = setIncrease(d[1],d[2]);
-                    i=0
-                }
-                
                 else{
-                    console.log("unsafe");
+                    console.log("not safe")
                     break;
-
-                } 
+                }
             }
         }
     })
     console.log(`safe: ${safe}`)
 }
 
-function setIncrease(v1,v2){
-    if(v2>v1){
-        return 1;
+function checkDifference(v1,v2, increase){
+        difference = (v2-v1)*increase;
+        console.log(difference)
+        if(difference<1 || difference>3){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+}
+
+function setIncrease(d){
+    averageIncrease = 0
+    for (let i = 0; i < (d.length-1); i++) {
+        if(d[i+1]>d[i]){
+            averageIncrease ++
+        }
+        else if(d[i+1]<d[i]){
+            averageIncrease --
+        }
+    }
+    if (averageIncrease >0){
+        console.log("increase")
+        return 1
     }
     else{
-        return -1;
+        console.log("decrease")
+        return -1
     }
+
 }
 
