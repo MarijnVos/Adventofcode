@@ -12,44 +12,33 @@ function processData(strData){
 
     let safe = 0
     data.forEach((d)=>{
-        Dampener = true;
         console.log(d);
 
         //set increase to -1 or +1
         increase = setIncrease(d);
         
-        
-        for (let i = 0; i < (d.length); i++) {
-            //get to the last level without problem it's safe
-            if(i == d.length-1){
-                console.log("safe")
-                safe ++
-                break;
-            }
-            if(checkDifference(d[i],d[i+1], increase)){
-                console.log("wrong")
-                if(Dampener){
-                    Dampener =false;
-                    if(i == d.length-2){
-                        console.log(`skip last value`)
-                    }
-                    else if(!checkDifference(d[i],d[i+2], increase)){
-                        i++
-                        console.log(`skip : ${i+2} next value ok`)
-                    }
-                    else if(i==0 && !checkDifference(d[1],d[2], increase)){
-                        console.log(`skip : 1 next value ok`)
-                    }
-                    else{
-                        console.log("not safe")
-                        break;
-                    }
+        for (let j = 0; j < (d.length); j++) { 
+            safeBool = false;
+            dCopy = d.slice()
+            d.splice(j,1);
+            for (let i = 0; i < (d.length); i++) { 
+                //get to the last level without problem it's safe
+                if(i == d.length-1){ 
+                    safeBool = true;  
+                    safe ++
+                    break;
                 }
-                else{
-                    console.log("not safe")
+                // check if values correct
+                if(checkDifference(d[i],d[i+1], increase)){
+                    d = dCopy.slice()
+                    safeBool = false;
                     break;
                 }
             }
+            if(safeBool){
+                console.log("safe")
+                break;}
+            
         }
     })
     console.log(`safe: ${safe}`)
@@ -57,13 +46,7 @@ function processData(strData){
 
 function checkDifference(v1,v2, increase){
         difference = (v2-v1)*increase;
-        console.log(difference)
-        if(difference<1 || difference>3){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return(difference<1 || difference>3);
 
 }
 
